@@ -8,7 +8,7 @@ create database Lojainfo
 go 
 
 use Lojainfo
-GO
+go
 
 create table tb_clientes(
        id_cliente int PRIMARY KEY IDENTITY(1,1),
@@ -39,6 +39,11 @@ create table tb_vendas(
 )
 GO
 
+create table tb_vendaCancelada(
+				id_vendaCancelada int unique identity(1,1),
+				id_venda int not null)
+go
+
 create table tb_vendas_itens(
        id_item int PRIMARY KEY identity(1,1),
        id_venda int not null,
@@ -52,6 +57,15 @@ alter table tb_vendas
       ADD CONSTRAINT fk_vda_cli
       FOREIGN KEY (id_cliente) REFERENCES tb_clientes(id_cliente)
       go 
+
+alter table tb_vendaCancelada
+		add constraint fk_cancelamentos
+		foreign key (id_vendaCancelada) references tb_vendas(id_venda)
+
+alter table tb_vendaCancelada
+	ADD CONSTRAINT fk_vda_cancelada 
+	FOREIGN KEY (id_venda) REFERENCES tb_vendas(id_venda)
+	go
 
 alter table tb_vendas_itens
 	ADD CONSTRAINT fk_vda_venda 
@@ -92,8 +106,10 @@ insert into tb_vendas_itens (id_venda,id_hardware,pco_vda,qtde_item) VALUES
 														(4,5,400.00,4),
 														(5,3,600.00,3)
 go
+
+insert into tb_vendaCancelada (id_venda) values ('1');
 																			  
-																			 
+			go 																 
 select * from tb_clientes
 go
 select * from tb_hardware
@@ -101,4 +117,6 @@ go
 select * from tb_vendas
 go
 select * from tb_vendas_itens
+go
+select * from tb_vendaCancelada
 go
